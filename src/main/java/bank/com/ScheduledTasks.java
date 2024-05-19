@@ -29,14 +29,14 @@ public class ScheduledTasks {
 
     private final BankAccountService bankAccountService;
 
-    @Scheduled(fixedDelay = 1000 * 10) // раз в минуту
+    @Scheduled(fixedDelay = 1000 * 60) // раз в минуту
     public void increaseTask() {
         long currentTime = System.currentTimeMillis();
         bankAccountService.increaseAllDeposits(5);
         log.info("Time increase by 5% is " + (System.currentTimeMillis() - currentTime));
     }
 
-    @Scheduled(fixedDelay = 1000 * 10)
+    @Scheduled(fixedDelay = 1000 * 100)
     public void createClientsTest() {
         for (int i = 0; i < 10; i++) {
             new Thread(() -> {
