@@ -1,12 +1,9 @@
 package bank.com;
 
-import bank.com.entities.BankAccount;
-import bank.com.entities.BankAccountRedis;
+
 import bank.com.entities.MoneyType;
-import bank.com.entities.Role;
 import bank.com.security.auth.AuthenticationResponse;
 import bank.com.security.auth.RegisterRequest;
-import bank.com.repo.AccountDao;
 import bank.com.services.BankAccountService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +16,6 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 @Component
