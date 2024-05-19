@@ -1,9 +1,12 @@
 package bank.com;
 
-
+import bank.com.entities.BankAccount;
+import bank.com.entities.BankAccountRedis;
 import bank.com.entities.MoneyType;
+import bank.com.entities.Role;
 import bank.com.security.auth.AuthenticationResponse;
 import bank.com.security.auth.RegisterRequest;
+import bank.com.repo.AccountDao;
 import bank.com.services.BankAccountService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +19,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Component
@@ -25,14 +29,14 @@ public class ScheduledTasks {
 
     private final BankAccountService bankAccountService;
 
-    @Scheduled(fixedDelay = 1000 * 60) // раз в минуту
+    @Scheduled(fixedDelay = 1000 * 10) // раз в минуту
     public void increaseTask() {
         long currentTime = System.currentTimeMillis();
         bankAccountService.increaseAllDeposits(5);
         log.info("Time increase by 5% is " + (System.currentTimeMillis() - currentTime));
     }
 
-    @Scheduled(fixedDelay = 1000 * 1000)
+    @Scheduled(fixedDelay = 1000 * 10)
     public void createClientsTest() {
         for (int i = 0; i < 10; i++) {
             new Thread(() -> {
