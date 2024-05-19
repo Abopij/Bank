@@ -29,7 +29,7 @@ public class ScheduledTasks {
 
     private final BankAccountService bankAccountService;
 
-    @Scheduled(fixedDelay = 1000 * 10) // раз в минуту
+    @Scheduled(fixedDelay = 1000 * 60) // раз в минуту
     public void increaseTask() {
         long currentTime = System.currentTimeMillis();
         bankAccountService.increaseAllDeposits(5);
