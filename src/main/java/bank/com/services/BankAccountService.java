@@ -72,7 +72,7 @@ public class BankAccountService {
 
     public boolean update(BankAccount account) {
         if (account.getMoney() >= 0.0) {
-            bankAccountRepo.saveAndFlush(account);
+            bankAccountRepo.updateWithTransactional(account.getId(), account.getMoney(), account.getType(), account.isActive());
             return true;
         }
         return false;
@@ -105,7 +105,7 @@ public class BankAccountService {
     }
 
     public List<BankAccount> findAll() {
-        return bankAccountRepo.findAll();
+        return bankAccountRepo.findAllWithLock();
     }
 
     public void increaseAllDeposits(double percent) {
