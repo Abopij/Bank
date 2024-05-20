@@ -1,9 +1,5 @@
 package bank.com.security.auth;
 
-import bank.com.entities.BankAccount;
-import bank.com.entities.BankAccountRedis;
-import bank.com.entities.MoneyType;
-import bank.com.repo.AccountDao;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +19,6 @@ public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
 
-    private final AccountDao accountDao;
-
     @ApiOperation(value = "User registration")
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(
@@ -41,5 +35,4 @@ public class AuthenticationController {
     ) {
         return ResponseEntity.ok(authenticationService.authenticate(request));
     }
-
 }
