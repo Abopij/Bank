@@ -9,9 +9,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserPrincipal {
 
-    private Long id;
-
     private String username;
-
-    private boolean isAdmin;
 }

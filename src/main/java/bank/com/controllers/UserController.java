@@ -25,7 +25,7 @@ public class UserController {
     @PostMapping("/change/phone")
     public String changePhone(@RequestBody String phone) {
         UserPrincipal user = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return userService.changePhone(user.getId(), phone) ? ResponseEntity.ok("Ok").toString() : ResponseEntity.status(403).toString();
+        return userService.changePhone(userService.getUserByUsername(user.getUsername()).getId(), phone) ? ResponseEntity.ok("Ok").toString() : ResponseEntity.status(403).toString();
     }
 
     @ApiOperation(value = "Changing the email")
@@ -38,13 +38,13 @@ public class UserController {
     @PostMapping("/remove/phone")
     public String removePhone() {
         UserPrincipal user = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return userService.removePhone(userService.getUserById(user.getId()).getPhone()) ? ResponseEntity.ok("Ok").toString() : ResponseEntity.status(403).toString();
+        return userService.removePhone(userService.getUserByUsername(user.getUsername()).getPhone()) ? ResponseEntity.ok("Ok").toString() : ResponseEntity.status(403).toString();
     }
 
     @ApiOperation(value = "Changing the email")
     @PostMapping("/remove/email")
     public String removeEmail() {
         UserPrincipal user = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return userService.removeEmail(userService.getUserById(user.getId()).getEmail()) ? ResponseEntity.ok("Ok").toString() : ResponseEntity.status(403).toString();
+        return userService.removeEmail(userService.getUserByUsername(user.getUsername()).getEmail()) ? ResponseEntity.ok("Ok").toString() : ResponseEntity.status(403).toString();
     }
 }

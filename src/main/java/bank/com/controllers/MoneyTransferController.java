@@ -30,9 +30,9 @@ public class MoneyTransferController {
     public String moneyTransfer(@RequestBody Long idRecipientClient, @RequestBody double money) {
         UserPrincipal user = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        if (idRecipientClient != null && user != null && !user.getId().equals(idRecipientClient)) {
+        if (idRecipientClient != null && user != null && !userService.getUserByUsername(user.getUsername()).equals(idRecipientClient)) {
             if (!userService.existsById(idRecipientClient)) {
-                boolean response = bankAccountService.transferMoney(bankAccountService.getUserById(user.getId()), bankAccountService.getUserById(idRecipientClient), money);
+                boolean response = bankAccountService.transferMoney(bankAccountService.getUserById(userService.getUserByUsername(user.getUsername()).getId()), bankAccountService.getUserById(idRecipientClient), money);
                 return response ? ResponseEntity.ok("Ok").toString() : ResponseEntity.status(400).toString();
             }
         }
