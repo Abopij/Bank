@@ -6,6 +6,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -23,7 +24,7 @@ public class MoneyTransferController {
 
     @ApiOperation(value = "Transfer money between Clients")
     @PostMapping
-    public String moneyTransfer(@RequestBody Long idRecipientClient, @RequestBody double money, Principal user) {
+    public String moneyTransfer(@RequestBody Long idRecipientClient, @RequestBody double money, @AuthenticationPrincipal Principal user) {
 
         if (idRecipientClient != null && user != null && !userService.getUserByUsername(user.getName()).equals(idRecipientClient)) {
             if (!userService.existsById(idRecipientClient)) {
