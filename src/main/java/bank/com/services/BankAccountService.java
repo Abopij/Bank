@@ -69,7 +69,6 @@ public class BankAccountService {
     public BankAccount getUserById(Long id) {
         return bankAccountRepo.getReferenceById(id);
     }
-
     public boolean update(BankAccount account) {
         if (account.getMoney() >= 0.0) {
             bankAccountRepo.updateWithTransactional(account.getId(), account.getMoney(), account.getType(), account.isActive());

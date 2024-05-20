@@ -25,4 +25,5 @@ public interface BankAccountRepo extends JpaRepository<BankAccount, Long> {
     @Modifying
     @Query("UPDATE BankAccount ba SET ba.money = :money, ba.type = :type, ba.isActive = :active WHERE ba.id = :id")
     void updateWithTransactional(@Param("id") Long id, @Param("money") double money, @Param("type") MoneyType type, @Param("active") boolean active);
+
 }

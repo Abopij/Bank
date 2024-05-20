@@ -1,11 +1,13 @@
 package bank.com.controllers;
 
 import bank.com.entities.User;
+import bank.com.entities.UserPrincipal;
 import bank.com.services.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,25 +23,28 @@ public class UserController {
 
     @ApiOperation(value = "Changing the phone")
     @PostMapping("/change/phone")
-    public String changePhone(@RequestBody Long idClient, @RequestBody String phone) {
-        return userService.changePhone(idClient, phone) ? ResponseEntity.ok("Ok").toString() : ResponseEntity.status(400).toString();
+    public String changePhone(@RequestBody String phone) {
+        UserPrincipal user = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return userService.changePhone(user.getId(), phone) ? ResponseEntity.ok("Ok").toString() : ResponseEntity.status(403).toString();
     }
 
     @ApiOperation(value = "Changing the email")
     @PostMapping("/change/email")
     public String changeEmail(@RequestBody Long idClient, @RequestBody String email) {
-        return userService.changePhone(idClient, email) ? ResponseEntity.ok("Ok").toString() : ResponseEntity.status(400).toString();
+        return userService.changePhone(idClient, email) ? ResponseEntity.ok("Ok").toString() : ResponseEntity.status(403).toString();
     }
 
     @ApiOperation(value = "Removing the phone")
     @PostMapping("/remove/phone")
-    public String removePhone(@RequestBody User user) {
-        return userService.removePhone(user.getPhone()) ? ResponseEntity.ok("Ok").toString() : ResponseEntity.status(400).toString();
+    public String removePhone() {
+        UserPrincipal user = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return userService.removePhone(userService.getUserById(user.getId()).getPhone()) ? ResponseEntity.ok("Ok").toString() : ResponseEntity.status(403).toString();
     }
 
     @ApiOperation(value = "Changing the email")
     @PostMapping("/remove/email")
-    public String removeEmail(@RequestBody User user) {
-        return userService.removeEmail(user.getPhone()) ? ResponseEntity.ok("Ok").toString() : ResponseEntity.status(400).toString();
+    public String removeEmail() {
+        UserPrincipal user = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return userService.removeEmail(userService.getUserById(user.getId()).getEmail()) ? ResponseEntity.ok("Ok").toString() : ResponseEntity.status(403).toString();
     }
 }

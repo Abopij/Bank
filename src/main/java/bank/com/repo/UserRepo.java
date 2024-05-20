@@ -12,4 +12,6 @@ import java.util.Optional;
 public interface UserRepo extends JpaRepository<User, Long>, JpaSpecificationExecutor<User>, PagingAndSortingRepository<User, Long> {
     User getUserByUsername(String username);
     Optional<User> findByUsername(String username);
+
+    boolean existsByUsername(String username);
 }

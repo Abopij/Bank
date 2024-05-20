@@ -126,4 +126,10 @@ public class UserService {
     public Optional<User> findByUsername(String username) {
         return userRepo.findByUsername(username);
     }
+
+
+    public boolean existsById(Long id) {
+        return userRepo.existsById(id);
+    }
+
 }
