@@ -18,7 +18,7 @@ import java.util.List;
 @Api(value = "/api/v1")
 public class SearchByUserController {
 
-    final UserService userService;
+    private final UserService userService;
 
     @ApiOperation(value = "Search users by different param (required false)")
     @GetMapping
@@ -26,15 +26,9 @@ public class SearchByUserController {
                              @RequestParam(required = false) String phone,
                              @RequestParam(required = false) String email,
                              @RequestParam(required = false) String fullName,
-                             @RequestParam(required = false) Integer page,
-                             @RequestParam(required = false) Integer count
+                             @RequestParam(required = false, defaultValue = "1") Integer page,
+                             @RequestParam(required = false, defaultValue = "10") Integer count
                              ) {
-        if (page == null) {
-            page = 1;
-        }
-        if (count == null) {
-            count = 10;
-        }
         if (date != null) {
             return userService.getUsersByDateGreater(date, page, count);
         }
@@ -51,7 +45,5 @@ public class SearchByUserController {
             }
         }
         return new PageImpl<>(userService.getAllUsers());
-
     }
-
 }

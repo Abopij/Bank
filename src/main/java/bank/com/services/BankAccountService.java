@@ -21,9 +21,9 @@ public class BankAccountService {
     @Value("${bank.account.transfer.commission}")
     private double commission;
 
-    final BankAccountRepo bankAccountRepo;
+    private final BankAccountRepo bankAccountRepo;
 
-    final AccountDao accountDao;
+    private final AccountDao accountDao;
 
     @Autowired
     public BankAccountService(BankAccountRepo bankAccountRepo, AccountDao accountDao) {

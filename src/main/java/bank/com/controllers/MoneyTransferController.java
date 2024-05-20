@@ -4,6 +4,7 @@ import bank.com.services.BankAccountService;
 import bank.com.services.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -18,15 +19,15 @@ import java.security.Principal;
 @Api(value = "api/v1/")
 public class MoneyTransferController {
 
-    final BankAccountService bankAccountService;
+    private final BankAccountService bankAccountService;
 
-    final UserService userService;
+    private final UserService userService;
 
     @ApiOperation(value = "Transfer money between Clients")
     @PostMapping
-    public String moneyTransfer(@RequestBody Long idRecipientClient, @RequestBody double money, @AuthenticationPrincipal Principal user) {
+    public String moneyTransfer(@NonNull @RequestBody Long idRecipientClient, @NonNull @RequestBody double money, @AuthenticationPrincipal Principal user) {
 
-        if (idRecipientClient != null && user != null && !userService.getUserByUsername(user.getName()).equals(idRecipientClient)) {
+        if (!userService.getUserByUsername(user.getName()).equals(idRecipientClient)) {
             if (!userService.existsById(idRecipientClient)) {
                 boolean response = bankAccountService.transferMoney(bankAccountService.getUserById(userService.getUserByUsername(user.getName()).getId()), bankAccountService.getUserById(idRecipientClient), money);
                 return response ? ResponseEntity.ok("Ok").toString() : ResponseEntity.status(400).toString();

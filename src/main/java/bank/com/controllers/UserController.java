@@ -7,10 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
@@ -20,7 +17,7 @@ import java.security.Principal;
 @Api(value = "/api/v1")
 public class UserController {
 
-    final UserService userService;
+    private final UserService userService;
 
     @ApiOperation(value = "Changing the phone")
     @PostMapping("/change/phone")
@@ -35,13 +32,13 @@ public class UserController {
     }
 
     @ApiOperation(value = "Removing the phone")
-    @PostMapping("/remove/phone")
+    @PatchMapping("/remove/phone")
     public String removePhone(@AuthenticationPrincipal Principal principal) {
          return userService.removePhone(userService.getUserByUsername(principal.getName()).getPhone()) ? ResponseEntity.ok("Ok").toString() : ResponseEntity.status(403).toString();
     }
 
     @ApiOperation(value = "Changing the email")
-    @PostMapping("/remove/email")
+    @PatchMapping("/remove/email")
     public String removeEmail(@AuthenticationPrincipal Principal principal) {
         return userService.removeEmail(userService.getUserByUsername(principal.getName()).getEmail()) ? ResponseEntity.ok("Ok").toString() : ResponseEntity.status(403).toString();
     }
