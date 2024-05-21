@@ -8,6 +8,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -25,15 +26,15 @@ public class MoneyTransferController {
 
     @ApiOperation(value = "Transfer money between Clients")
     @PostMapping
-    public String moneyTransfer(@NonNull @RequestBody Long idRecipientClient, @NonNull @RequestBody double money, @AuthenticationPrincipal Principal user) {
+    public ResponseEntity<?> moneyTransfer(@NonNull @RequestBody Long idRecipientClient, @NonNull @RequestBody double money, @AuthenticationPrincipal UserDetails user) {
 
-        if (!userService.getUserByUsername(user.getName()).equals(idRecipientClient)) {
+        if (!userService.getUserByUsername(user.getUsername()).getId().equals(idRecipientClient)) {
             if (!userService.existsById(idRecipientClient)) {
-                boolean response = bankAccountService.transferMoney(bankAccountService.getUserById(userService.getUserByUsername(user.getName()).getId()), bankAccountService.getUserById(idRecipientClient), money);
-                return response ? ResponseEntity.ok("Ok").toString() : ResponseEntity.status(400).toString();
+                boolean response = bankAccountService.transferMoney(bankAccountService.getUserById(userService.getUserByUsername(user.getUsername()).getId()), bankAccountService.getUserById(idRecipientClient), money);
+                return response ? ResponseEntity.ok("Ok") : ResponseEntity.status(400).build();
             }
         }
-        return ResponseEntity.status(400).toString();
+        return ResponseEntity.status(400).build();
     }
 
 }

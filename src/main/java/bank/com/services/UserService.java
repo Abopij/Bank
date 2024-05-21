@@ -3,6 +3,7 @@ package bank.com.services;
 import bank.com.entities.User;
 import bank.com.repo.UserRepo;
 import bank.com.repo.specifications.UserSpecs;
+import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
+@Log
 public class UserService {
 
     private final UserRepo userRepo;
@@ -44,10 +46,14 @@ public class UserService {
         Specification<User> filter = Specification.where(null);
         filter = filter.and(UserSpecs.equalsToPhone(phone));
 
-        User user = userRepo.findOne(filter).get();
-        if (user.getEmail() != null) {
-            user.setPhone(null);
-            update(user);
+        Optional<User> user = userRepo.findOne(filter);
+        if (user.isEmpty()) {
+            return false;
+        }
+
+        if (user.get().getEmail() != null) {
+            user.get().setPhone(null);
+            update(user.get());
             return true;
         }
         return false;
@@ -57,10 +63,13 @@ public class UserService {
         Specification<User> filter = Specification.where(null);
         filter = filter.and(UserSpecs.equalsToEmail(email));
 
-        User user = userRepo.findOne(filter).get();
-        if (user.getPhone() != null) {
-            user.setEmail(null);
-            update(user);
+        Optional<User> user = userRepo.findOne(filter);
+        if (user.isEmpty()) {
+            return false;
+        }
+        if (user.get().getPhone() != null) {
+            user.get().setEmail(null);
+            update(user.get());
             return true;
         }
         return false;
@@ -70,14 +79,29 @@ public class UserService {
         Specification<User> filter = Specification.where(null);
         filter = filter.and(UserSpecs.equalsToPhone(phone));
 
-        if (userRepo.findOne(filter).get() != null) {
+        if (userRepo.findOne(filter).isPresent()) {
+            return false;
+        }
+        User user = userRepo.getReferenceById(id);
+        user.setPhone(phone);
+
+        update(user);
+
+        return true;
+    }
+
+    public boolean changeEmail(Long id, String email) {
+        Specification<User> filter = Specification.where(null);
+        filter = filter.and(UserSpecs.equalsToEmail(email));
+
+        if (userRepo.findOne(filter).isPresent()) {
             return false;
         }
 
         User user = userRepo.getReferenceById(id);
-        user.setPhone(phone);
+        user.setEmail(email);
 
-        save(user);
+        update(user);
 
         return true;
     }
@@ -94,16 +118,14 @@ public class UserService {
         Specification<User> filter = Specification.where(null);
         filter = filter.and(UserSpecs.equalsToPhone(phone));
 
-        return userRepo.findOne(filter)
-                .get();
+        return userRepo.findOne(filter).isPresent() ? userRepo.findOne(filter).get() : null;
     }
 
     public User getUserByEmail(String email) {
         Specification<User> filter = Specification.where(null);
         filter = filter.and(UserSpecs.equalsToEmail(email));
 
-        return userRepo.findOne(filter)
-                .get();
+        return userRepo.findOne(filter).isPresent() ? userRepo.findOne(filter).get() : null;
     }
     public Page<User> getUsersByDateGreater(Date date, int numberPage, int countMaxInPage) {
         Specification<User> filter = Specification.where(null);
